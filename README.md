@@ -8,4 +8,4 @@ In this project, we have built a prototype of a small business intelligence syst
 	The database will consist of three tables. The first table is the areas table and it will contain one column only which is the areas names. The second table is the sensors table. This table will consist of sensor ID column and the area column. The last table will consist of five column which are sensorID, date, time, rainfall (mm), and the flood alarm notification. 
   
   
-  
+ ![alt text](images/table.png?raw=true) 
