@@ -16,3 +16,8 @@ Then, by using Power BI from Microsoft, we managed to create a dashboard that sh
 Below is a screehshot of the interactive dashboard that is divided into three sections. The upper left section shows the water level by each sensor in a specific region during a particular month. The user can easily switch between areas and months from a filter menu. The upper right section shows the numbers of notifications by each area in 2020. The lower section shows the total rain in the year 2020 by area:
 
 ![alt text](images/2.png)
+
+
+Below is a screenshot of another interactive dashboard shows a linear graph of the water level in millimeter by sensor in a particular area throughout the year 2020
+
+![alt text](images/3.png)
