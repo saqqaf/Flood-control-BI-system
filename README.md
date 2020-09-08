@@ -9,8 +9,10 @@ In this project, we have built a prototype of a small business intelligence syst
   
   The structure of the dataset that will be exported to Power BI will be:
 
-
+![alt text](images/1.png)
 
 Then, by using Power BI from Microsoft, we managed to create a dashboard that shows multiple reports that can be beneficial for decision makers based on the data generated.
 
 Below is a screehshot of the interactive dashboard that is divided into three sections. The upper left section shows the water level by each sensor in a specific region during a particular month. The user can easily switch between areas and months from a filter menu. The upper right section shows the numbers of notifications by each area in 2020. The lower section shows the total rain in the year 2020 by area:
+
+[!alt text](images/2.png)
