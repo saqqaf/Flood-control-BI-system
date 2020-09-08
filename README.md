@@ -18,7 +18,7 @@ Below is a screehshot of the interactive dashboard that is divided into three se
 ![alt text](images/2.png)
 
 
-Below is a screenshot of another interactive dashboard shows a linear graph of the water level in millimeter by sensor in a particular area throughout the year 2020
+Below is a screenshot of another interactive dashboard shows a linear graph of the water level in millimeter by sensor in a particular area throughout the year 2020:
 
-![alt text](images/3.png)
+![alt text](images/3.jpeg)
 
