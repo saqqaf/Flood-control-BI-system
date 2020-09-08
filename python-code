@@ -1,0 +1,142 @@
+import mysql.connector
+import random
+import pydbgen
+import datetime
+import time
+
+#to create an empty table in the database
+
+raindb = mysql.connector.connect(
+    host ="localhost",
+    user = "root",
+    password = "password",
+    database = "waterlevel"
+)
+
+mycursor = raindb.cursor()
+
+mycursor.execute("CREATE TABLE bisystem (sensorID VARCHAR(255), date VARCHAR(255),time DATETIME, rainfall DECIMAL(5,2),redalert VARCHAR(1)")
+raindb.commit()
+
+
+
+#we will create a table called sensor to store the sensorIDs in it
+
+col = "CREATE TABLE sensor (sensorID VARCHAR(255), area VARCHAR(255))"
+
+mycursor.execute(col)
+raindb.commit()
+
+#we will insert the sensorIDs into the created table
+
+from pydbgen import pydbgen
+myDB=pydbgen.pydb()
+
+col = "INSERT INTO sensor (sensorID) VALUES (%s)"
+val = []
+for _ in range(108):
+        str = myDB.license_plate()
+        val.append((str,))
+
+
+mycursor.executemany(col,val)
+raindb.commit()
+
+print(mycursor.rowcount, "was inserted.")
+
+
+#fecth all sensorIDs into a variable
+
+mycursor.execute("SELECT sensorID FROM sensor")
+
+results = mycursor.fetchall()
+
+#we will insert random values from the variable 'results' and insert it into 9500 rows in 'rainfall' table as sensorIDs
+
+col = "INSERT INTO bisystem(sensorID) VALUES (%s)"
+val = []
+
+for _ in range(9500):
+    val.append(random.choice(results))
+
+mycursor.executemany(col, val)
+raindb.commit()
+
+
+#we will create a table called area to store the areas names in it
+
+col = "CREATE TABLE area (area VARCHAR(255))"
+
+mycursor.execute(col)
+raindb.commit()
+
+#we will insert the areas names in the new table
+
+area_str = "Cottage Walk,Cyber Bistari Commercial Centre,Cyber Point Barat,Cyberjaya Business Park,Garden Residence,Jalan Sri Tasik Barat,Kanvas Square,Kelab Komuniti Cyberjaya,Lebuh Sentosa,Majlis Perbandaran Sepang,Perdana Lakeview East Park,Perdana Lakeview West Park,Persiaran Barat,Persiaran Perdana,Persiaran Persekutuan,Persiaran Selatan,Persiaran Sultan Salahuddin Abdul Aziz Shah,Persiaran Timur,Persiaran Utara,Putra Bridge,Rimba Permai,Semarak Api,Seri Bakti,Seri Bestari,Seri Gemilang Bridge,Seri Perdana Bridge,Seri Saujana,Seri Setia Bridge,Seri Wawasan Bridge,Sri Tasik Bara,Taman Neocyber,Taman Pinggiran Cyber"
+area_list = area_str.split(',')
+
+
+col = "INSERT INTO area(area) VALUES (%s)"
+val = [(x,) for x in area_list]
+print(val)
+
+mycursor.executemany(col,val)
+raindb.commit()
+
+
+
+#Now, we will assign random area’s name to the sensors in 'sensor' table
+
+col = "UPDATE sensor SET area = (SELECT area FROM area ORDER BY rand() LIMIT 1)"  #to asign random areas from area table to sensor table
+
+mycursor.execute(col)
+raindb.commit()
+
+print(mycursor.rowcount, "was inserted.")
+
+#we will insert time values in bisystem table
+
+sql = "update bisystem set time = concat(lpad(floor(rand() * 24), 2, '0'),':',lpad(floor(rand() * 12) * 5, 2, '0'));"
+mycursor.execute(sql)
+
+raindb.commit()
+
+print(mycursor.rowcount, "record(s) affected")
+
+
+#we will insert the date values
+
+sql = "UPDATE bisystem SET date = (SELECT DATE_FORMAT(TIMESTAMPADD(SECOND, FLOOR(RAND() * TIMESTAMPDIFF(SECOND, '2020-01-01', '2020-12-31 ')), '2020-01-01'), '%Y-%m-%d'));"
+
+
+mycursor.execute(sql)
+raindb.commit()
+
+print(mycursor.rowcount, "record(s) affected")
+
+
+#we will insert the waterlevel values
+
+sql = "UPDATE bisystem SET rainfall = (SELECT ROUND(RAND() * (500-0)+0,2));"
+
+mycursor.execute(sql)
+raindb.commit()
+
+print(mycursor.rowcount, "record(s) affected")
+
+
+#Finally, we will enter the values of the flood alarm notification
+
+sql = "UPDATE bisystem SET redalert = CASE WHEN rainfall >= 300 THEN 'Y' ELSE 'N' END;"
+
+mycursor.execute(sql)
+raindb.commit()
+
+print(mycursor.rowcount, "records affected")
+
+
+#finally, we can export the dataset into a CSV file
+
+sql = """SELECT r.sensorID, s.area, r.date, r.Time, r.rainfall, r.redalert FROM sensor s INNER JOIN bisystem r ON s.sensorID = r.sensorID ORDER BY r.date, Time INTO OUTFILE 'C:/ProgramData/MySQL/MySQL Server 8.0/Uploads/rainfallDB.csv' FIELDS TERMINATED BY ',' OPTIONALLY ENCLOSED BY '"' LINES TERMINATED BY '\n';"""
+
+mycursor.execute(sql)
